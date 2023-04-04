@@ -99,4 +99,3 @@ def just_the_right_size
   SQL
 end
 
-p small_and_wealthy
