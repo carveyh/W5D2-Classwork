@@ -139,6 +139,27 @@ def andrews_films_and_leads
   # List the film title and the leading actor for all of the films 'Julie
   # Andrews' played in.
   execute(<<-SQL)
+    SELECT
+      title, name
+    FROM
+      movies
+    JOIN
+      castings ON movies.id = castings.movie_id
+    JOIN
+      actors On actors.id = castings.actor_id
+    WHERE
+      ord = 1 AND title IN (
+        SELECT
+          title
+        FROM
+          movies
+        JOIN
+          castings ON movies.id = castings.movie_id
+        JOIN
+          actors On actors.id = castings.actor_id
+        WHERE
+          name = 'Julie Andrews'
+      );
   SQL
 end
 
@@ -146,6 +167,22 @@ def prolific_actors
   # Obtain a list in alphabetical order of actors who've had at least 15
   # starring roles.
   execute(<<-SQL)
+    SELECT
+      name
+    FROM
+      movies
+    JOIN
+      castings ON movies.id = castings.movie_id
+    JOIN
+      actors ON actors.id = castings.actor_id
+    WHERE
+      ord = 1
+    GROUP BY
+      name
+    HAVING
+      COUNT(*) >= 15
+    ORDER BY
+      name;
   SQL
 end
 
